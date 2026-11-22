@@ -68,7 +68,8 @@ def main(argv=None):
         return 2
 
     load_dotenv()
-    if not os.getenv("OLOSTEP_API_KEY"):
+    api_key = os.getenv("OLOSTEP_API_KEY")
+    if not api_key:
         print(
             "Error: OLOSTEP_API_KEY is not set. Add it to your .env file or environment.",
             file=sys.stderr,
@@ -77,7 +78,7 @@ def main(argv=None):
 
     formats = list(dict.fromkeys(args.formats or ["markdown"]))
     try:
-        client = Olostep()
+        client = Olostep(api_key=api_key)
         page = client.scrapes.create(
             url_to_scrape=args.url,
             formats=formats,

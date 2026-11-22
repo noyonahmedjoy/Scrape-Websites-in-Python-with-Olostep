@@ -1,6 +1,11 @@
+import io
+import os
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from types import SimpleNamespace
+from unittest.mock import patch
 
-from olostep_scraper.cli import build_parser, validate_url
+from olostep_scraper.cli import build_parser, main, validate_url
 
 
 class ValidateUrlTests(unittest.TestCase):
@@ -34,6 +39,24 @@ class ArgumentParserTests(unittest.TestCase):
         )
         self.assertEqual(args.formats, ["markdown", "text"])
         self.assertEqual(args.wait_ms, 2000)
+
+
+class MainTests(unittest.TestCase):
+    def test_passes_api_key_to_olostep_client(self):
+        page = SimpleNamespace(markdown_content="Scraped content", credits_consumed=1)
+        with (
+            patch("olostep_scraper.cli.load_dotenv"),
+            patch.dict(os.environ, {"OLOSTEP_API_KEY": "test-key"}, clear=True),
+            patch("olostep_scraper.cli.Olostep") as olostep,
+            redirect_stdout(io.StringIO()),
+            redirect_stderr(io.StringIO()),
+        ):
+            olostep.return_value.scrapes.create.return_value = page
+
+            result = main(["https://example.com/"])
+
+        self.assertEqual(result, 0)
+        olostep.assert_called_once_with(api_key="test-key")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "olostep-scraper"
+version = "0.1.0"
+description = "A beginner-friendly website scraper using the Olostep Python SDK."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "olostep>=0.1.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+olostep-scraper = "olostep_scraper.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

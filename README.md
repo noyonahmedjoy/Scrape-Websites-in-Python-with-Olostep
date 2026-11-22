@@ -27,7 +27,7 @@ Olostep requests may use credits. Check your account and the current pricing bef
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/scrape-websites-with-olostep.git
+git clone https://github.com/noyonahmedjoy/scrape-websites-with-olostep.git
 cd scrape-websites-with-olostep
 ```
 
